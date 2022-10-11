@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+using System.Data.Sql;
+
+namespace QLNS
+{
+    public partial class frmDangNhap : Form
+    {
+        public frmDangNhap()
+        {
+            InitializeComponent();
+
+        }
+        private SqlConnection con = null;
+
+        private void btnDangNhap_Click(object sender, EventArgs e)
+        {
+            /*if (txtTenDangNhap.Text == "")
+            {
+                MessageBox.Show("Vui lòng nhập tên đăng nhập ");
+                txtTenDangNhap.Focus();
+            }
+            else if (txtMatKhau.Text == "")
+            {
+                MessageBox.Show("Vui lòng nhập mật khẩu ");
+                txtMatKhau.Focus();
+            }
+            else
+            {
+                if ((txtTenDangNhap.Text == "admin") && (txtMatKhau.Text == "admin"))
+                {
+                    MessageBox.Show("Đăng nhập thành công(Quyền admin)", "THÔNG BÁO");
+                    frmMain f1 = new frmMain();
+                    this.Hide();
+                    f1.ShowDialog();
+                }
+                else if((txtTenDangNhap.Text == "user") && (txtMatKhau.Text == "user"))
+                {
+                    MessageBox.Show("Đăng nhập thành công(Quyền user)", "THÔNG BÁO");
+                    frmMain f1 = new frmMain();
+                    this.Hide();
+                    f1.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng", "THÔNG BÁO");
+                    this.txtTenDangNhap.Clear();
+                    this.txtMatKhau.Clear();
+                    this.txtTenDangNhap.Focus();
+                }*/
+            con = new SqlConnection();
+            con.ConnectionString = @"Data Source=TIEN-PC\SQLEXPRESS;Initial Catalog=QLNSu;Integrated Security=True";
+            con.Open();
+            string select = "Select * From TaiKhoan where TenDangNhap='" + txtTenDangNhap.Text + "' and MatKhau='" + txtMatKhau.Text + "'";
+            SqlCommand cmd = new SqlCommand(select, con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                reader.Read();
+                MessageBox.Show("Đăng nhập vào hệ thống (Quyền Admin) !", "Thông báo !");
+                this.Hide();
+                //this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Đăng nhập vào hệ thống (Quyền user) !", "Thông báo !");
+                this.Hide();
+               // this.Close();
+            }
+            frmMain frm = new frmMain();
+            frm.Show();
+            //frm.ShowDialog();
+            
+        
+
+        }
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void frmDangNhap_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void frmDangNhap_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnDangNhap_Click(sender, e);
+            }
+        }
+
+        private void frmDangNhap_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
